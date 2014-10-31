@@ -1,5 +1,5 @@
 angular.module('chitty', [])
-  .controller('MainCtrl', ['$scope', function($scope) {
+  .controller('MainCtrl', ['$scope', 'posts', function($scope, posts) {
     this.test = 'chitty';
     this.posts = [];
     this.addPost = function() {
@@ -19,4 +19,11 @@ angular.module('chitty', [])
     this.incrementUpvotes = function(post) {
       post.upvotes += 1;
     };
+    this.posts = posts.posts;
+  }])
+  .factory('posts', [function() {
+    var o = {
+      posts: []
+    };
+    return o;
   }])
