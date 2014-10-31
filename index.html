@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Chitty</title>
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.js">
+  </head>
+  <body ng-app="chitty" ng-controller="MainCtrl as main">
+    <h1>{{main.test}}</h1>
+
+    <div ng-repeat="post in main.posts | orderBy: '-upvotes'">
+      <span ng-click="incrementUpvotes(post)">^</span>
+      <a ng-show="post.link" href="{{post.link}}">
+        {{post.title}}
+      </a>
+      - thumbs up: {{post.upvotes}}
+    </div>
+
+    <form>
+      <input type="text" placeholder="Title" ng-model="main.title"/><br>
+      <input type="text" placeholder="Link" ng-model="main.link"/><br>
+      <button type="submit" ng-click="main.addPost()">Post</button>
+    </form>
+  </body>
+</html>
