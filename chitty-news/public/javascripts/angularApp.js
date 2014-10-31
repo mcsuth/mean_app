@@ -13,6 +13,7 @@ angular.module('chitty', ['ui.router'])
       })
     $urlRouterProvider.otherwise('home');
   }])
+  // Controller for posting Posts
   .controller('MainCtrl', ['$scope', 'posts', function($scope, posts) {
     this.test = 'chitty';
     this.posts = [];
@@ -38,6 +39,7 @@ angular.module('chitty', ['ui.router'])
       post.upvotes += 1;
     };
   }])
+  // Controller for posting Comments
   .controller('PostsCtrl', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts) {
     this.title1 = 'Posts'
     this.post = posts.posts[$stateParams.id];
