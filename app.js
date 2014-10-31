@@ -6,11 +6,11 @@ angular.module('chitty', ['ui.router'])
         templateUrl: '/home.html',
         controller: 'MainCtrl as main'
       })
-    $state('posts', {
-      url: '/posts/{id}',
-      templateUrl: '/posts.html',
-      controller: 'PostsCtrl'
-    })
+      .state('posts', {
+        url: '/posts/{id}',
+        templateUrl: '/posts.html',
+        controller: 'PostsCtrl as posts'
+      })
     $urlRouterProvider.otherwise('home');
   }])
   .controller('MainCtrl', ['$scope', 'posts', function($scope, posts) {
@@ -19,12 +19,16 @@ angular.module('chitty', ['ui.router'])
     this.addPost = function() {
       // prevent a user from submitting as post with a blank title
       if (this.title == '' || this.title == null) {
-        alert("blabk")
+        alert("Blank")
       } else {
-        this.posts.push({ 
-          title: this.title, 
+        this.posts.push({
+          title: this.title,
           link: this.link,
-          upvotes: 0
+          upvotes: 0,
+          comments: [
+            {author: 'Joe', body: 'Cool post!', upvotes: 0},
+            {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
+          ]
         });
         this.title = '';
         this.link = '';
@@ -35,15 +39,18 @@ angular.module('chitty', ['ui.router'])
     };
   }])
   .controller('PostsCtrl', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts) {
-    this.posts.push({
-      title: $scope.title,
-      link: $scope.link,
-      upvotes: 0,
-      comments: [
-        {author: 'Joe', body: 'Cool post!', upvotes: 0},
-        {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
-      ]
-    });
+    this.title1 = 'Posts'
+    this.post = posts.posts[$stateParams.id];
+    this.addComment = function() {
+      if (this.body == '' || this.body == null) {
+        this.post.comments.push({
+          body: this.body,
+          author: 'User',
+          upvotes: 0
+        });
+        this.body = '';
+      }
+    }
   }])
   .factory('posts', [function() {
     var o = {
