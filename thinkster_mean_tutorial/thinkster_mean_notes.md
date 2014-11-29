@@ -118,70 +118,25 @@
 		POST /posts/:id/comments - add a new comment to a post by ID
 		PUT /posts/:id/comments/:id/upvote - upvote a comment
 
-25. Edit the routes/index.js file and create a GET route for retrieving posts in routes/index.js. It should return a JSON list containing all posts. Get rid of the existing code with the following:
-
-		var mongoose = require('mongoose');
-		var Post = mongoose.model('Post');
-		var Comment = mongoose.model('Comment');
-		
-		router.get('/posts', function(req, res, next) {
-		  Post.find(function(err, posts){
-		    if(err){ return next(err); 
-		  }
-		    res.json(posts);
-		  });
-		});
-
-26. Make fake data to see the GET request in the routes/index.js file. Add this:
-
-		router.post('/posts', function(req, res, next) {
-		  var post = new Post(req.body);
-		
-		  post.save(function(err, post){
-		    if(err) {
-		    	return next(err); 
-		    }
-		    res.json(post);
-		  });
-		});
-
-27. Schema's don't work so put them in the routes/index.js
+25. Edit the routes/index.js file and create a GET route for retrieving posts in routes/index.js. It should return a JSON list containing all posts. 
 
 		var express = require('express');
 		var router = express.Router();
 		
-		/* GET home page. */
+		// 1. GET HOME PAGE
 		router.get('/', function(req, res) {
 		  res.render('index', { title: 'Express' });
 		});
 		
-		// 1. GET POSTS
+		
+		// 2. REQUIRE MONGOOSE & MODELS & SCHEMAS
 		var mongoose = require('mongoose');
+		require('./../models/Posts');
+		require('./../models/Comments');
+		var Post = mongoose.model('Post');
+		var Comment = mongoose.model('Comment');
 		
-		var PostSchema = new mongoose.Schema({
-		  title: String,
-		  link: String,
-		  upvotes: {type: Number, default: 0},
-		  comments: [{ 
-		    type: mongoose.Schema.Types.ObjectId, 
-		    ref: 'Comment' 
-		  }]
-		});
-		
-		var Post = mongoose.model('Posts', PostSchema);
-		
-		var CommentSchema = new mongoose.Schema({
-		  body: String,
-		  author: String,
-		  upvotes: {type: Number, default: 0},
-		  post: { 
-		    type: mongoose.Schema.Types.ObjectId, 
-		    ref: 'Post' 
-		  }
-		});
-		
-		var Comment = mongoose.model('Comments', CommentSchema);
-		
+		// 3. GET POSTS
 		router.get('/posts', function(req, res, next) {
 		  Post.find(function(err, posts){
 		    if(err){ return next(err); }
@@ -190,7 +145,7 @@
 		  });
 		});
 		
-		// 2. POST POSTS
+		// 4. POST POSTS
 		router.post('/posts', function(req, res, next) {
 		  var post = new Post(req.body);
 		
@@ -203,12 +158,15 @@
 		
 		module.exports = router;
 
-
-28. Test the 2 routes: GET and POST with cURL
+26. Make fake data to see the GET request in the routes/index.js file. Test the 2 routes: GET and POST with cURL
 
 		curl --data 'title=test&link=http://test.com' http://localhost:3000/posts
+		
+		curl http://localhost:3000/posts 
+		=== or ===
+		checked http://localhost:3000/posts to see the saved JSON
 
-
+### Pre-loading Objects
 
 
 
