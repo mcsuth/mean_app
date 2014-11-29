@@ -145,7 +145,66 @@
 		  });
 		});
 
-27. Test the 2 routes: GET and POST with cURL
+27. Schema's don't work so put them in the routes/index.js
+
+		var express = require('express');
+		var router = express.Router();
+		
+		/* GET home page. */
+		router.get('/', function(req, res) {
+		  res.render('index', { title: 'Express' });
+		});
+		
+		// 1. GET POSTS
+		var mongoose = require('mongoose');
+		
+		var PostSchema = new mongoose.Schema({
+		  title: String,
+		  link: String,
+		  upvotes: {type: Number, default: 0},
+		  comments: [{ 
+		    type: mongoose.Schema.Types.ObjectId, 
+		    ref: 'Comment' 
+		  }]
+		});
+		
+		var Post = mongoose.model('Posts', PostSchema);
+		
+		var CommentSchema = new mongoose.Schema({
+		  body: String,
+		  author: String,
+		  upvotes: {type: Number, default: 0},
+		  post: { 
+		    type: mongoose.Schema.Types.ObjectId, 
+		    ref: 'Post' 
+		  }
+		});
+		
+		var Comment = mongoose.model('Comments', CommentSchema);
+		
+		router.get('/posts', function(req, res, next) {
+		  Post.find(function(err, posts){
+		    if(err){ return next(err); }
+		
+		    res.json(posts);
+		  });
+		});
+		
+		// 2. POST POSTS
+		router.post('/posts', function(req, res, next) {
+		  var post = new Post(req.body);
+		
+		  post.save(function(err, post){
+		    if(err){ return next(err); }
+		
+		    res.json(post);
+		  });
+		});
+		
+		module.exports = router;
+
+
+28. Test the 2 routes: GET and POST with cURL
 
 		curl --data 'title=test&link=http://test.com' http://localhost:3000/posts
 
