@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 
+// 1. Schema
 var PostSchema = new mongoose.Schema({
   title: String,
   link: String,
@@ -9,5 +10,11 @@ var PostSchema = new mongoose.Schema({
     ref: 'Comment' 
   }]
 });
+
+// 2. Method for upvoting
+PostSchema.methods.upvote = function(cb) {
+  this.upvotes += 1;
+  this.save(cb);
+};
 
 mongoose.model('Post', PostSchema);

@@ -167,10 +167,126 @@
 		checked http://localhost:3000/posts to see the saved JSON
 
 ### Pre-loading Objects
+27. Create a route for preloading post objects in routes/index.js
+
+		router.param('post', function(req, res, next, id) {
+		  var query = Post.findById(id);
+		
+		  query.exec(function (err, post){
+		    if (err) { return next(err); }
+		    if (!post) { return next(new Error("can't find post")); }
+		
+		    req.post = post;
+		    return next();
+		  });
+		});
+
+28. Create our route for returning a single post
+
+		router.get('/posts/:post', function(req, res) {
+		  res.json(req.post);
+		});
+
+		check: http://localhost:3000/posts/<POST ID>
+		
+29. Add an upvote() method to the Posts schema in Posts.js for upvoting posts
+
+		PostSchema.methods.upvote = function(cb) {
+		  this.upvotes += 1;
+		  this.save(cb);
+		};
+
+30. Create the upvoting route in our index.js
+
+		router.put('/posts/:post/upvote', function(req, res, next) {
+		  req.post.upvote(function(err, post){
+		    if (err) { return next(err); }
+		
+		    res.json(post);
+		  });
+		});
+		
+31. Test this route
+
+		curl -X PUT http://localhost:3000/posts/<POST ID>/upvote
+
+32. Create comments route for a particular post in index.js
+
+		router.post('/posts/:post/comments', function(req, res, next) {
+		  var comment = new Comment(req.body);
+		  comment.post = req.post;
+		
+		  comment.save(function(err, comment){
+		    if(err){ return next(err); }
+		
+		    req.post.comments.push(comment);
+		    req.post.save(function(err, post) {
+		      if(err){ return next(err); }
+		
+		      res.json(comment);
+		    });
+		  });
+		});
+
+33. Create a route for preloading comments objects in routes/index.js
+
+		// 9. GET RETURNING A SINGLE COMMENT
+		router.get('/comments/:comment', function(req, res) {
+		  res.json(req.comment);
+		});
+		
+		check: http://localhost:3000/comments/<POST ID>
+
+34. make a slight modification to our GET /posts/:post route by using the populate() function to retrieve comments along with posts:
+
+		router.get('/posts/:post', function(req, res, next) {
+		  req.post.populate('comments', function(err, post) {
+		    res.json(post);
+		  });
+		});
+
+35. Implement getAll() to retrieve posts and inject the $http in the 'posts' factory within angularApp.js
+
+		.factory('posts', ['$http', function($http){
+		  ...
+			o.getAll = function() {
+			  return $http.get('/posts').success(function(data){
+			    angular.copy(data, o.posts);
+			  });
+			};
+		  ...
+		});
+		
+		Notice that we're using the angular.copy() function to do this as it will make our UI update properly.
+
+36. Now we need to call this function at an appropriate time to load the data. We do this by adding a property called resolve to our home state. Use the resolve property of ui-router to ensure posts are loaded:
+
+		...
+		.state('home', {
+		  url : '/home',
+		  templateUrl: '/home.html',
+		  controller: 'MainCtrl',
+		  resolve: {
+		    postPromise: ['posts', function(posts){
+		      return posts.getAll();
+		    }]
+		  }
+		})
+		...
+		
+		By using the resolve property in this way, we are ensuring that anytime our home state is entered, we will automatically query all posts from our backend before the state actually finishes loading.
+
+### Creatingg New Posts		
+37. 
 
 
 
-# File Structure
+
+
+
+
+#
+ File Structure
 
 	app.js
 	bin/

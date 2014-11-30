@@ -14,7 +14,7 @@ angular.module('flapperNews', ['ui.router'])
     $urlRouterProvider.otherwise('home');
   }])
 
-  .factory('posts', [function() {
+  .factory('posts', ['$http', function($http) {
     var o = {
       posts: [
         {title: 'First Post', upvotes: 2, comments: 
@@ -23,6 +23,11 @@ angular.module('flapperNews', ['ui.router'])
             {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
           ]}
       ]
+    };
+    o.getAll = function() {
+      return $http.get('/posts').success(function(data){
+        angular.copy(data, o.posts);
+      });
     };
     return o;
   }])
