@@ -21,18 +21,26 @@ angular.module('flapperNews', ['ui.router'])
 
   .factory('posts', ['$http', function($http) {
     var o = {
-      posts: [
-        // {title: 'First Post', upvotes: 2, comments: 
-        //   [
-        //     {author: 'Joe', body: 'Cool post!', upvotes: 0},
-        //     {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
-        //   ]}
-      ]
+      posts: []
     };
+    // method for getting exisiting posts
     o.getAll = function() {
       return $http.get('/posts').success(function(data){
         angular.copy(data, o.posts);
       });
+    };
+    // method for creating new posts
+    o.create = function(post) {
+      return $http.post('/posts', post).success(function(data){
+        o.posts.push(data);
+      });
+    };
+    // method for updating upvoting posts
+    o.upvote = function(post) {
+      return $http.put('/posts/' + post._id + '/upvote')
+        .success(function(data){
+          post.upvotes += 1;
+        });
     };
     return o;
   }])
@@ -40,22 +48,19 @@ angular.module('flapperNews', ['ui.router'])
   .controller('MainCtrl', ['$scope', 'posts', function($scope, posts){
     $scope.webtitle = "Meanie Posts"
     $scope.posts = posts.posts;
-    $scope.addPost = function() {
-      if(!$scope.title || $scope.title === '' || $scope.title === undefined) { 
-        alert('Empty!');
-      } else {
-        $scope.posts.push({
-          title: $scope.title,
-          link: $scope.link,
-          upvotes: 0,
-          comments: []
-        });
-        $scope.title = '';
-        $scope.link = '';
-      }
+    // Updated addPost function to save to server
+    $scope.addPost = function(){
+      if(!$scope.title || $scope.title === '') { return; }
+      posts.create({
+        title: $scope.title,
+        link: $scope.link,
+      });
+      $scope.title = '';
+      $scope.link = '';
     };
+    // Updated incrementUpvotes function to save to server
     $scope.incrementUpvotes = function(post) {
-      post.upvotes +=1;
+      posts.upvote(post);
     };
     $scope.incrementDownvotes = function(post) {
       post.upvotes -=1;

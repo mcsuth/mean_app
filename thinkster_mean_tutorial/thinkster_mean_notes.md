@@ -299,9 +299,44 @@
 		Check your localhost to see all the entries in the DB http://localhost:3000/#/home
 		
 ### Creating New Posts		
-37. 
+37. we need to enable creating new posts. As with loading posts, we're going to do this by adding another method to our posts factory:
 
+		o.create = function(post) {
+		  return $http.post('/posts', post).success(function(data){
+		    o.posts.push(data);
+		  });
+		};
 
+38. Now we can modify the $scope.addPost() method in MainCtrl to save posts to the server:
+
+		$scope.addPost = function(){
+		  if(!$scope.title || $scope.title === '') { return; }
+		  posts.create({
+		    title: $scope.title,
+		    link: $scope.link,
+		  });
+		  $scope.title = '';
+		  $scope.link = '';
+		};
+
+39. Update the upvoting posts method in the 'posts' factory
+
+		o.upvote = function(post) {
+		  return $http.put('/posts/' + post._id + '/upvote')
+		    .success(function(data){
+		      post.upvotes += 1;
+		    });
+		};
+
+40. Modify incrementUpvotes() in the MainCtrl
+
+		$scope.incrementUpvotes = function(post) {
+			posts.upvote(post);
+		};
+    
+41. Modify the Comments link to point to the proper route in the index.ejs
+
+		<a href="#/posts/{{post._id}}">Comments</a>
 
 
 
