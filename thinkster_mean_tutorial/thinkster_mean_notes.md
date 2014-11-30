@@ -275,8 +275,30 @@
 		...
 		
 		By using the resolve property in this way, we are ensuring that anytime our home state is entered, we will automatically query all posts from our backend before the state actually finishes loading.
+		
+37. Remove fake JSON in angularApp.js so your factory should look like this:
 
-### Creatingg New Posts		
+		.factory('posts', ['$http', function($http) {
+		  var o = {
+		    posts: [
+		      // {title: 'First Post', upvotes: 2, comments: 
+		      //   [
+		      //     {author: 'Joe', body: 'Cool post!', upvotes: 0},
+		      //     {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
+		      //   ]}
+		    ]
+		  };
+		  o.getAll = function() {
+		    return $http.get('/posts').success(function(data){
+		      angular.copy(data, o.posts);
+		    });
+		  };
+		  return o;
+		}])
+		
+		Check your localhost to see all the entries in the DB http://localhost:3000/#/home
+		
+### Creating New Posts		
 37. 
 
 
