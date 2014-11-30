@@ -338,6 +338,64 @@
 
 		<a href="#/posts/{{post._id}}">Comments</a>
 
+42. Add a method in our 'posts' facotry to retrieve a single post from our server:
+
+o.get = function(id) {
+  return $http.get('/posts/' + id).then(function(res){
+    return res.data;
+  });
+};
+
+Notice that instead of using the success() method we have traditionally used, we are instead using a promise.
+
+43. Add the resolve object to our posts state
+
+.state('posts', {
+ url : '/posts/{id}',
+ templateUrl: '/posts.html',
+ controller: 'PostsCtrl', 
+ resolve: {
+   post: ['$stateParams', 'posts', function($stateParams, posts) {
+     return posts.get($stateParams.id);
+   }]
+ }
+});
+
+44. To get access to the post object we just retrieved in the PostsCtrl, instead of going through the posts service, the specific object will be directly injected into our PostsCtrl. We can modify our controller to gain access to it like so:
+
+		.controller('PostsCtrl', ['$scope', 'posts', 'post', '$stateParams', function($scope, posts, post, $stateParams){
+		  $scope.post = post;
+		  $scope.addComment = function(){
+		    if($scope.body === undefined) { return; }
+		    $scope.post.comments.push({
+		      body: $scope.body,
+		      author: 'Smith',
+		      upvotes: 0
+		    });
+		    $scope.body = '';
+		  };
+		}])
+
+45. To enable adding comments add a method to the posts factory
+
+		o.addComment = function(id, comment) {
+		  return $http.post('/posts/' + id + '/comments', comment);
+		};
+
+46. Then edit the addComment() method in PostsCtrl
+
+$scope.addComment = function(){
+  if($scope.body === '') { return; }
+  posts.addComment(post._id, {
+    body: $scope.body,
+    author: 'user',
+  }).success(function(comment) {
+    $scope.post.comments.push(comment);
+  });
+  $scope.body = '';
+};
+
+47. 
 
 
 

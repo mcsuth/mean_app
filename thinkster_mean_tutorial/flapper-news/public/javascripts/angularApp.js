@@ -14,7 +14,12 @@ angular.module('flapperNews', ['ui.router'])
       .state('posts', {
         url : '/posts/{id}',
         templateUrl: '/posts.html',
-        controller: 'PostsCtrl'
+        controller: 'PostsCtrl', 
+        resolve: {
+          post: ['$stateParams', 'posts', function($stateParams, posts) {
+            return posts.get($stateParams.id);
+          }]
+        }
       });
     $urlRouterProvider.otherwise('home');
   }])
@@ -42,6 +47,16 @@ angular.module('flapperNews', ['ui.router'])
           post.upvotes += 1;
         });
     };
+    // method for getting a single post
+    o.get = function(id) {
+      return $http.get('/posts/' + id).then(function(res){
+        return res.data;
+      });
+    };
+    // method for posting comments
+    o.addComment = function(id, comment) {
+      return $http.post('/posts/' + id + '/comments', comment);
+    };
     return o;
   }])
 
@@ -67,14 +82,15 @@ angular.module('flapperNews', ['ui.router'])
     };
   }])
 
-  .controller('PostsCtrl', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts){
-    $scope.post = posts.posts[$stateParams.id];
+  .controller('PostsCtrl', ['$scope', 'posts', 'post', '$stateParams', function($scope, posts, post, $stateParams){
+    $scope.post = post;
     $scope.addComment = function(){
-      if($scope.body === undefined) { return; }
-      $scope.post.comments.push({
+      if($scope.body === '') { return; }
+      posts.addComment(post._id, {
         body: $scope.body,
-        author: 'Smith',
-        upvotes: 0
+        author: 'user',
+      }).success(function(comment) {
+        $scope.post.comments.push(comment);
       });
       $scope.body = '';
     };
