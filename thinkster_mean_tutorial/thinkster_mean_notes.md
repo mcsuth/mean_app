@@ -231,11 +231,18 @@
 33. Create a route for preloading comments objects in routes/index.js
 
 		// 9. GET RETURNING A SINGLE COMMENT
-		router.get('/comments/:comment', function(req, res) {
-		  res.json(req.comment);
+		router.get('/posts/:post/comments', function(req, res, next) {
+		  req.post.populate('comments', function(err, post) {
+		    if ( post['_id'] == req.params.post ) {
+		      res.json(post.comments);
+		      console.log("====================================");
+		      console.log("   DISPLAYING COMMENTS OF A POST");
+		      console.log("====================================");
+		      console.log(post.comments);
+		      console.log("====================================")
+		    }
+		  });
 		});
-		
-		check: http://localhost:3000/comments/<POST ID>
 
 34. make a slight modification to our GET /posts/:post route by using the populate() function to retrieve comments along with posts:
 
