@@ -429,18 +429,87 @@ Notice that instead of using the success() method we have traditionally used, we
 	views/
 	models/
 
-# Mongodb
+# Starting Envirnment
 
 - Start mongod server
 
-		mongod
+		sudo mongod
 		
 - Open another terminal window & start mongo shell
 
-		mongo
-		
-- Go to project folder with gruntfile and start grunt
+		sudo mongo
 
-		grunt
+- Open another terminal window
+
+		sudo npm start
 		
+
+# Mongo DB Shell
+
+- We are used the 'news' DB in this tutorial. Within the terminal that you started the mongo shell, to find the DB that you are using:
+
+		> show databases
+			admin     (empty)
+			local     0.078GB
+			mean-dev  0.078GB
+			news      0.078GB <-- We are using this DB
+			test      (empty)
+
+- Find out which DB you are currently on
+
+		> db
+			test
+
+- Switch DB to 'news' 
+
+		> use news
+			switched to db news
+
+- Display models, or collections
+
+		> show collections
+			comments
+			posts
+			system.indexes
 		
+- To DELETE/RESET ALL DATA in your database
+
+		> db.dropDatabase()
+		
+- Display all 'Posts' or 'Comments' in 'pretty' format
+
+		> db.posts.find({}).pretty()
+		> db.comments.find({}).pretty()
+		
+- Limit the number of entries displayed 
+
+		> db.posts.find({}).pretty().limit(2)
+		> db.comments.find({}).pretty().limit(5)
+- Query by 'title'
+
+		> db.posts.find( {'title' : 'Link 1'} ).pretty()
+			{
+				"_id" : ObjectId("548a02fff1df3c9356515859"),
+				"title" : "Link 1",
+				"link" : "http://link1.com",
+				"comments" : [
+					ObjectId("548a0316f1df3c935651585b"),
+					ObjectId("548a0319f1df3c935651585c")
+				],
+				"upvotes" : 1,
+				"__v" : 2
+			}
+
+- If you want to colorize the MongoDB queries
+
+		https://github.com/TylerBrock/mongo-hacker
+		
+
+
+
+		
+
+
+<!--- Go to project folder with gruntfile and start grunt
+
+		grunt-->		

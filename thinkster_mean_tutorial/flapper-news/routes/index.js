@@ -4,6 +4,8 @@ var router = express.Router();
 // 1. GET HOME PAGE
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
+  // This will print out 'this is a sample' when you go to localhost:3000
+  //res.send('this is a sample')
 });
 
 // 6. GET RETURNING A SINGLE POST
@@ -24,9 +26,8 @@ router.put('/posts/:post/upvote', function(req, res, next) {
 
 //8. COMMENTS ROUTE
 router.post('/posts/:post/comments', function(req, res, next) {
-  var comment = new Comment(req.body);
+  var comment = new theCommentsModel(req.body);
   comment.post = req.post;
-
   comment.save(function(err, comment){
     if(err){ return next(err); }
 
@@ -40,20 +41,24 @@ router.post('/posts/:post/comments', function(req, res, next) {
 });
 
 // 9. GET RETURNING A SINGLE COMMENT
-router.get('/comments/:comment', function(req, res) {
-  res.json(req.comment);
+router.get('posts/:post/comments', function(req, res, next) {
+  ThePostsModel.find(function(err, posts){
+    if(err){ return next(err); }
+
+    res.json(posts);
+  });
 });
 
 // 2. REQUIRE MONGOOSE & MODELS & SCHEMAS
 var mongoose = require('mongoose');
 require('./../models/Posts');
 require('./../models/Comments');
-var Post = mongoose.model('Post');
-var Comment = mongoose.model('Comment');
+var ThePostsModel = mongoose.model('Post');
+var theCommentsModel = mongoose.model('Comment');
 
 // 3. GET POSTS
 router.get('/posts', function(req, res, next) {
-  Post.find(function(err, posts){
+  ThePostsModel.find(function(err, posts){
     if(err){ return next(err); }
 
     res.json(posts);
@@ -62,7 +67,7 @@ router.get('/posts', function(req, res, next) {
 
 // 4. POST POSTS
 router.post('/posts', function(req, res, next) {
-  var post = new Post(req.body);
+  var post = new ThePostsModel(req.body);
 
   post.save(function(err, post){
     if(err){ return next(err); }
@@ -74,7 +79,7 @@ router.post('/posts', function(req, res, next) {
 
 // 5. ROUTES FOR PRELOADING POST OBJECTS
 router.param('post', function(req, res, next, id) {
-  var query = Post.findById(id);
+  var query = ThePostsModel.findById(id);
 
   query.exec(function (err, post){
     if (err) { return next(err); }

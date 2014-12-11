@@ -1,3 +1,15 @@
+// ===================================
+//    REMOVE FOR INTERNET EXPLORER
+// ===================================
+var log = function(input) {
+  try {
+    console.log(input);
+  } catch (input) {
+    // don't do nothing
+  }
+};
+// ===================================
+
 angular.module('flapperNews', ['ui.router'])
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
     $stateProvider
@@ -61,7 +73,11 @@ angular.module('flapperNews', ['ui.router'])
       return $http.put('/posts/' + post + '/comments/'+ comment + '/upvote')
         .success(function(data){
           comment.upvotes += 1;
-        });
+        })
+        .error(function(data){
+          log("upvote not working")
+          debugger
+        })
     };
     return o;
   }])
@@ -83,9 +99,6 @@ angular.module('flapperNews', ['ui.router'])
     $scope.incrementUpvotes = function(post) {
       posts.upvote(post);
     };
-    // $scope.incrementDownvotes = function(post) {
-    //   post.upvotes -=1;
-    // };
   }])
 
   .controller('PostsCtrl', ['$scope', 'posts', 'post', '$stateParams', function($scope, posts, post, $stateParams){
