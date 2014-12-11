@@ -1,3 +1,15 @@
+// ===================================
+//    REMOVE FOR INTERNET EXPLORER
+// ===================================
+var log = function(input) {
+  try {
+    console.log(input);
+  } catch (input) {
+    // don't do nothing
+  }
+};
+// ===================================
+
 var express = require('express');
 var router = express.Router();
 
@@ -12,11 +24,11 @@ router.get('/', function(req, res) {
 router.get('/posts/:post', function(req, res, next) {
   req.post.populate('comments', function(err, post) {
     res.json(post);
-      console.log("====================================");
-      console.log("       DISPLAYING A POST");
-      console.log("====================================");
-      console.log(post);
-      console.log("====================================")
+      log("====================================");
+      log("       DISPLAYING A POST");
+      log("====================================");
+      log(post);
+      log("====================================")
   });
 });
 
@@ -40,11 +52,11 @@ router.post('/posts/:post/comments', function(req, res, next) {
     req.post.save(function(err, post) {
       if(err){ return next(err); }
       res.json(comment);
-      console.log("====================================");
-      console.log("       POSTING A COMMENT ");
-      console.log("====================================");
-      console.log(comment);
-      console.log("====================================");
+      log("====================================");
+      log("       POSTING A COMMENT ");
+      log("====================================");
+      log(comment);
+      log("====================================");
     });
   });
 });
@@ -54,11 +66,11 @@ router.get('/posts/:post/comments', function(req, res, next) {
   req.post.populate('comments', function(err, post) {
     if ( post['_id'] == req.params.post ) {
       res.json(post.comments);
-      console.log("====================================");
-      console.log("   DISPLAYING COMMENTS OF A POST");
-      console.log("====================================");
-      console.log(post.comments);
-      console.log("====================================")
+      log("====================================");
+      log("   DISPLAYING COMMENTS OF A POST");
+      log("====================================");
+      log(post.comments);
+      log("====================================")
     }
   });
 });
@@ -75,26 +87,25 @@ router.get('/posts', function(req, res, next) {
   ThePostsModel.find(function(err, posts){
     if(err){ return next(err); }
     res.json(posts);
-    console.log("====================================");
-    console.log("       DISPLAYING ALL POSTS ");
-    console.log("====================================");
-    console.log(posts);
-    console.log("====================================");
+    log("====================================");
+    log("       DISPLAYING ALL POSTS ");
+    log("====================================");
+    log(posts);
+    log("====================================");
   });
 });
 
 // 4. POST POSTS
 router.post('/posts', function(req, res, next) {
   var post = new ThePostsModel(req.body);
-
   post.save(function(err, post){
     if(err){ return next(err); }
     res.json(post);
-    console.log("====================================");
-    console.log("        POSTING A POST: ");
-    console.log("====================================");
-    console.log(post);
-    console.log("====================================");
+    log("====================================");
+    log("        POSTING A POST: ");
+    log("====================================");
+    log(post);
+    log("====================================");
   });
 });
 
