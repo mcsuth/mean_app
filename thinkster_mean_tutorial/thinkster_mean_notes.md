@@ -424,8 +424,7 @@ Notice that instead of using the success() method we have traditionally used, we
 
 
 
-#
- File Structure
+# File Structure
 
 	app.js
 	bin/
