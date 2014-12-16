@@ -76,14 +76,13 @@ angular.module('flapperNews', ['ui.router'])
         })
         .error(function(data){
           log("upvote not working")
-          debugger
         })
     };
     return o;
   }])
 
   .controller('MainCtrl', ['$scope', 'posts', function($scope, posts){
-    $scope.webtitle = "Meanie Posts"
+    $scope.webtitle = "Alpha Reddit"
     $scope.posts = posts.posts;
     // Updated addPost function to save to server
     $scope.addPost = function(){

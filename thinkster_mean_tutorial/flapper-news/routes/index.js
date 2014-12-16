@@ -46,7 +46,10 @@ router.post('/posts/:post/comments', function(req, res, next) {
   var comment = new theCommentsModel(req.body);
   comment.post = req.post;
   comment.save(function(err, comment){
-    if(err){ return next(err); }
+    if(err){ 
+      // return next(err); 
+      log("Debug here")
+    }
 
     req.post.comments.push(comment);
     req.post.save(function(err, post) {
@@ -73,6 +76,22 @@ router.get('/posts/:post/comments', function(req, res, next) {
       log("====================================")
     }
   });
+});
+
+// 10. GET PARTICULAR COMMENT OF A PARTICULAR POST
+router.get('/posts/:post/comments/:comment', function(req, res, next) {
+  req.post.populate('comments', function(err, post) {
+    var commentsofapost = post.comments;
+    for (var i = 0; i < commentsofapost.length; i++) {
+      if (commentsofapost[i]['_id'] == req.params.comment) {
+        res.json(commentsofapost[i]);
+        log("======================================================");
+        log("DISPLAYING PARTICULAR COMMENT OF A PARTICULAR POST");
+        log("====================================");
+        log(commentsofapost[i]);
+      };
+    };
+  })
 });
 
 // 2. REQUIRE MONGOOSE & MODELS & SCHEMAS
