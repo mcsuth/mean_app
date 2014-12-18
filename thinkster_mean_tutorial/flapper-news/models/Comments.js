@@ -12,8 +12,8 @@ var CommentSchema = new mongoose.Schema({
 });
 
 // 2. Method for upvoting
-CommentSchema.methods.upvote = function(cb) {
-  console.log("$$$$ FIX ME $$$$")
+CommentSchema.methods.upvoteComment = function(cb) {
+  console.log("$$$$ FIX ME - COMMENTS.JS $$$$")
   console.log(this);
   console.log("$$$$$$$$")
   this.upvotes += 1;

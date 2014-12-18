@@ -96,13 +96,28 @@ router.get('/posts/:post/comments/:comment', function(req, res, next) {
 });
 
 // 11. UPVOTING ROUTE FOR COMMENTS IN A POST
-router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
-  req.post.upvote(function(err, post){
-    if (err) { return next(err); }
-    log("/////////")
-    res.json(post);
-    log("/////////")
-  });
+// router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
+router.get('/posts/:post/comments/:comment/upvote', function(req, res, next) {
+  // res.json('this is a sample')
+  req.post.populate('comments', function(err, post) {
+    var commentsofapost = post.comments;
+    for (var i = 0; i < commentsofapost.length; i++) {
+      if (commentsofapost[i]['_id'] == req.params.comment) {
+        res.json(commentsofapost[i]);
+        log("======================================================");
+        log(commentsofapost[i]);
+        log("====================================");
+      };
+    };
+  })
+  // req.comment.upvoteComment(function(err, comment){
+  //   if (err) { 
+  //     return next(err); 
+  //   }
+  //   log("/////////")
+  //   res.json(post);
+  //   log("/////////")
+  // });
 });
 
 // 2. REQUIRE MONGOOSE & MODELS & SCHEMAS
