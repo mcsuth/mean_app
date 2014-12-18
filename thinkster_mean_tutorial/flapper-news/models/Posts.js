@@ -13,6 +13,9 @@ var PostSchema = new mongoose.Schema({
 
 // 2. Method for upvoting
 PostSchema.methods.upvote = function(cb) {
+  console.log("$$$$ THIS WORKS $$$$")
+  console.log(this);
+  console.log("$$$$ ========== $$$$")
   this.upvotes += 1;
   this.save(cb);
 };

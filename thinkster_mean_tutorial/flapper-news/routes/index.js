@@ -87,11 +87,22 @@ router.get('/posts/:post/comments/:comment', function(req, res, next) {
         res.json(commentsofapost[i]);
         log("======================================================");
         log("DISPLAYING PARTICULAR COMMENT OF A PARTICULAR POST");
-        log("====================================");
+        log("======================================================");
         log(commentsofapost[i]);
+        log("====================================");
       };
     };
   })
+});
+
+// 11. UPVOTING ROUTE FOR COMMENTS IN A POST
+router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
+  req.post.upvote(function(err, post){
+    if (err) { return next(err); }
+    log("/////////")
+    res.json(post);
+    log("/////////")
+  });
 });
 
 // 2. REQUIRE MONGOOSE & MODELS & SCHEMAS
