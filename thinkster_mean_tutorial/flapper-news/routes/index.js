@@ -34,7 +34,7 @@ router.get('/posts/:post', function(req, res, next) {
 
 // 7. UPVOTING ROUTE
 router.put('/posts/:post/upvote', function(req, res, next) {
-  req.post.upvote(function(err, post){
+  req.post.upvotePost(function(err, post){
     if (err) { 
       return next(err); 
     }
@@ -48,10 +48,8 @@ router.post('/posts/:post/comments', function(req, res, next) {
   comment.post = req.post;
   comment.save(function(err, comment){
     if(err){ 
-      // return next(err); 
-      log("Debug here")
+      // return next(err);
     }
-
     req.post.comments.push(comment);
     req.post.save(function(err, post) {
       if(err){ return next(err); }
@@ -98,27 +96,26 @@ router.get('/posts/:post/comments/:comment', function(req, res, next) {
 
 // 11. UPVOTING ROUTE FOR COMMENTS IN A POST
 router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
-// router.get('/posts/:post/comments/:comment/upvote', function(req, res, next) {
-  // res.json('this is a sample')
-  // req.post.populate('comments', function(err, post) {
-  //   var commentsofapost = post.comments;
-  //   for (var i = 0; i < commentsofapost.length; i++) {
-  //     if (commentsofapost[i]['_id'] == req.params.comment) {
-  //       res.json(commentsofapost[i]);
-  //       log("======================================================");
-  //       log(commentsofapost[i]);
-  //       log("====================================");
-  //     };
-  //   };
-  // })
-  req.post.comments.upvoteComment(function(err, comment){
-    if (err) { 
-      return next(err); 
-    }
-    log("/////////")
-    res.json(post);
-    log("/////////")
-  });
+  req.post.populate('comments', function(err, post) {
+    var commentsofapost = post.comments;
+    for (var i = 0; i < commentsofapost.length; i++) {
+      if (commentsofapost[i]['_id'] == req.params.comment) {
+        res.json(commentsofapost[i]);
+        log("======================================================");
+        log("DISPLAYING PARTICULAR COMMENT OF A PARTICULAR POST");
+        log("======================================================");
+        commentsofapost[i]['upvotes'] += 1;
+        log(commentsofapost[i]);
+        log("====================================");
+      };
+    };
+  })
+  // req.post.comments.upvoteComment(function(err, comments){
+  //   if (err) { 
+  //     return next(err); 
+  //   }
+  //   res.json(post);
+  // });
 });
 
 // 2. REQUIRE MONGOOSE & MODELS & SCHEMAS

@@ -12,8 +12,8 @@ var PostSchema = new mongoose.Schema({
 });
 
 // 2. Method for upvoting
-PostSchema.methods.upvote = function(cb) {
-  console.log("$$$$ POST.JS $$$$")
+PostSchema.methods.upvotePost = function(cb) {
+  console.log("$$$$ ==== POST.JS ==== $$$$")
   console.log(this);
   console.log("$$$$ ========== $$$$")
   this.upvotes += 1;
