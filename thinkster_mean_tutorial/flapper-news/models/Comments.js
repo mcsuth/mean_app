@@ -13,11 +13,11 @@ var CommentSchema = new mongoose.Schema({
 
 // 2. Method for upvoting
 CommentSchema.methods.upvoteComment = function(cb) {
+  this.upvotes += 1;
+  this.save(cb);
   console.log("$$$$ ==== FIX ME - COMMENTS.JS ==== $$$$")
   console.log(this);
   console.log("$$$$ ========== $$$$")
-  this.upvotes += 1;
-  this.save(cb);
 };
 
 mongoose.model('Comment', CommentSchema);

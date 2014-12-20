@@ -13,11 +13,11 @@ var PostSchema = new mongoose.Schema({
 
 // 2. Method for upvoting
 PostSchema.methods.upvotePost = function(cb) {
+  this.upvotes += 1;
+  this.save(cb);
   console.log("$$$$ ==== POST.JS ==== $$$$")
   console.log(this);
   console.log("$$$$ ========== $$$$")
-  this.upvotes += 1;
-  this.save(cb);
 };
 
 mongoose.model('Post', PostSchema);
