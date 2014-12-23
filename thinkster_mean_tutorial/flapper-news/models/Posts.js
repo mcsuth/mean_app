@@ -1,3 +1,15 @@
+// ===================================
+//    REMOVE FOR INTERNET EXPLORER
+// ===================================
+var log = function(input) {
+  try {
+    console.log(input);
+  } catch (input) {
+    // don't do nothing
+  }
+};
+// ===================================
+
 var mongoose = require('mongoose');
 
 // 1. Schema
@@ -15,9 +27,11 @@ var PostSchema = new mongoose.Schema({
 PostSchema.methods.upvotePost = function(cb) {
   this.upvotes += 1;
   this.save(cb);
-  console.log("$$$$ ==== POST.JS ==== $$$$")
-  console.log(this);
-  console.log("$$$$ ========== $$$$")
+  log("======================================================");
+  log("            UPVOTING A PARTICULAR POST");
+  log("======================================================");
+  log(this);
+  log("======================================================");
 };
 
 mongoose.model('Post', PostSchema);

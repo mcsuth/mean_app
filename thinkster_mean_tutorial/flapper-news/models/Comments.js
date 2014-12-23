@@ -1,3 +1,15 @@
+// ===================================
+//    REMOVE FOR INTERNET EXPLORER
+// ===================================
+var log = function(input) {
+  try {
+    log(input);
+  } catch (input) {
+    // don't do nothing
+  }
+};
+// ===================================
+
 var mongoose = require('mongoose');
 
 // 1. Schema
@@ -15,9 +27,11 @@ var CommentSchema = new mongoose.Schema({
 CommentSchema.methods.upvoteComment = function(cb) {
   this.upvotes += 1;
   this.save(cb);
-  console.log("$$$$ ==== FIX ME - COMMENTS.JS ==== $$$$")
+  console.log("======================================================");
+  console.log("  UPVOTING A PARTICULAR COMMENT OF A PARTICULAR POST");
+  console.log("======================================================");
   console.log(this);
-  console.log("$$$$ ========== $$$$")
+  console.log("======================================================");
 };
 
 mongoose.model('Comment', CommentSchema);

@@ -77,8 +77,8 @@ angular.module('flapperNews', ['ui.router'])
           // debugger
         })
         .error(function(data){
-          log("upvote not working");
-          document.write('<span style="font-family: Verdana; font-size: 12px">'+data+'</span>');
+          log("waahhh, upvote not working");
+          //document.write('<span style="font-family: Verdana; font-size: 12px">'+data+'</span>');
         })
     };
     return o;
