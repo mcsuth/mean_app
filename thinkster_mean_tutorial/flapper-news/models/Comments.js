@@ -3,7 +3,7 @@
 // ===================================
 var log = function(input) {
   try {
-    log(input);
+    console.log(input);
   } catch (input) {
     // don't do nothing
   }
@@ -27,11 +27,11 @@ var CommentSchema = new mongoose.Schema({
 CommentSchema.methods.upvoteComment = function(cb) {
   this.upvotes += 1;
   this.save(cb);
-  console.log("======================================================");
-  console.log("  UPVOTING A PARTICULAR COMMENT OF A PARTICULAR POST");
-  console.log("======================================================");
-  console.log(this);
-  console.log("======================================================");
+  log("======================================================");
+  log("  UPVOTING A PARTICULAR COMMENT OF A PARTICULAR POST");
+  log("======================================================");
+  log(this);
+  log("======================================================");
 };
 
 mongoose.model('Comment', CommentSchema);

@@ -17,7 +17,7 @@ var router = express.Router();
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
   // This will print out 'this is a sample' when you go to localhost:3000
-  //res.send('this is a sample')
+  // res.send('this is a sample')
 });
 
 // 6. GET RETURNING A SINGLE POST

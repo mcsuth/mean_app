@@ -70,11 +70,9 @@ angular.module('flapperNews', ['ui.router'])
       return $http.post('/posts/' + id + '/comments', comment);
     };
     o.upvoteComment = function(post, comment) {
-      // debugger
       return $http.put('/posts/' + post + '/comments/'+ comment + '/upvote')
         .success(function(data){
           comment.upvotes += 1;
-          // debugger
         })
         .error(function(data){
           log("waahhh, upvote not working");
