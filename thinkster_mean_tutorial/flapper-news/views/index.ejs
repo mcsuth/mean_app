@@ -30,7 +30,6 @@
         </span>
         - upvotes {{post.upvotes}}
         <span>
-          <!--<a href="#/posts/{{$index}}">Comments</a>-->
           <a href="#/posts/{{post._id}}">Comments</a>
         </span>
       </div>
@@ -53,7 +52,7 @@
 
       <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
         <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post._id, comment._id)"></span>
-        <pre>{{comment|json}}</pre>
+        <!--// <pre>{{comment|json}}</pre>-->
         {{comment.upvotes}} - by {{comment.author}}
         <span style="font-size:20px; margin-left:10px;">
           {{comment.body}}
