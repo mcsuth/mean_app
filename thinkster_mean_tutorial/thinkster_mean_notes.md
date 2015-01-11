@@ -9,7 +9,7 @@
 		
 		npm install express
 		npm install angular
-		angular-ui-router
+		npm install angular-ui-router
 		npm install bootstrap
 		
 5. Create index.html
@@ -21,8 +21,8 @@
 7. Install Node & update Dependencies
 
 		npm install -g express-generator
-		express --ejs flapper-news
-		cd flapper-news
+		express --ejs [name_of_your_shit]
+		cd [name_of_your_shit]
 		npm install
 		
 8. Install Mongoose		
@@ -510,7 +510,11 @@ Notice that instead of using the success() method we have traditionally used, we
 
 		https://github.com/TylerBrock/mongo-hacker
 		
+# PassportJS
 
+---
+
+Coming soon
 
 
 		
